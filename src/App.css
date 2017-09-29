@@ -1,0 +1,149 @@
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 60px;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.pin-top {
+  position: relative;
+}
+
+.pin-bottom {
+  position: relative;
+}
+
+.pinned {
+  position: fixed !important;
+}
+.card-content{
+  padding: 0 !important;
+}
+
+input[type=range]::-moz-range-track {
+  background-color: #00bcd4 !important;
+}
+
+#controls{
+  margin-left: -10px;
+  width: 100%;
+  height: 90px;
+  bottom: -15px;
+}
+
+#queue{
+  bottom: 110px;
+}
+
+#tracks {
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+#bars {
+  position: absolute;
+  background-color: #000000;
+}
+
+#bars img {
+  bottom: 1px;
+  left: 1px;
+  position: absolute;
+  overflow: hidden;
+  opacity: 0.8;
+}
+
+.running{
+  animation: sound 0ms -800ms linear infinite alternate;
+}
+
+.playing {
+  background: #00bcd4;
+  bottom: 1px;
+  height: 3px;
+  position: absolute;
+  width: 10px;
+}
+
+.playing:nth-child(1) {
+  left: 0px;
+  animation-duration: 406ms;
+}
+
+.playing:nth-child(2) {
+  left: 11px;
+  animation-duration: 432ms;
+}
+
+.playing:nth-child(3) {
+  left: 22px;
+  animation-duration: 483ms;
+}
+
+@keyframes sound {
+  0% {
+    height: 10px;
+  }
+  25% {
+    height: 15px;
+  }
+  50% {
+    height: 20px;
+  }
+  75% {
+    height: 25px;
+  }
+  100% {
+    height: 30px;
+  }
+}
+.collection {
+  overflow: visible !important;
+}
+
+#queue {
+  padding: 5px 5px 25px 5px;
+  pointer-events: visible !important;
+  position: fixed;
+  left: 25px;
+  opacity: 1;
+  width: 700px;
+  height: 350px;
+  z-index: 2000;
+  text-align: left;
+  overflow: visible;
+}
+
+#queue ul li .content{
+  width: 400px;
+}
+
+#queue_tracks {
+  height: 100%;
+  overflow-y: auto !important;
+}
+
+#queue:after {
+  position: absolute;
+  content: " ";
+  top: 100%;
+  left: 50%;
+  margin-left: -290px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 15px 13px 0 13px;
+  border-color: rgba(255, 255, 255, 1) transparent transparent transparent;
+}
