@@ -4,22 +4,9 @@ import './App.css';
 import {Col, Collection, Icon, Navbar, NavItem, Row} from "react-materialize";
 import Player from "./Player";
 import Track from './Track';
+import Playlist from './Playlist';
 import * as ReactDOM from "react-dom";
 var SC = require('soundcloud');
-
-class TracksContainer extends Component{
-    constructor(props){
-        super(props);
-        this.tracks = props.tracks;
-    }
-    render(){
-        return(
-            <Collection z-depth={0}>
-                {this.tracks}
-            </Collection>
-        );
-    }
-}
 
 class Jukebox extends Component {
     constructor(props){
@@ -31,6 +18,7 @@ class Jukebox extends Component {
         this.search_bar = <input onKeyUp={(e)=>this.search(e)} type="text" placeholder="Search by artist, title, genre, etc." className="black-text"/>;
         this.searching = false;
     }
+
     search(e){
         if(e.which === 13) {
             let self = this;
@@ -46,7 +34,7 @@ class Jukebox extends Component {
                     search_results.push(current);
                 });
                 console.log(search_results);
-                ReactDOM.render(<TracksContainer tracks={search_results}/>, document.getElementById('tracks'));
+                ReactDOM.render(<Playlist tracks={search_results} title={'Search for ' + value}/>, document.getElementById('tracks'));
             });
         }
     }
