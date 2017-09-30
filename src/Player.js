@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import formatSecondsAsTime from './Helpers'
 import {Button, Card, Col, Icon, Row} from "react-materialize";
-import * as ReactDOM from "react-dom";
+
 var SC = require('soundcloud');
 
 class DurationIndicator extends Component{
@@ -86,40 +86,45 @@ class Player extends Component {
         super(props);
         this.jukebox = props.jukebox;
         this.queue = [];
-        this.paused = true;
         this.state = {
             volume: 50,
             muted: false,
+            paused: true,
             shuffle: false,
             repeat: 0
         };
         let self = this;
         this.current_track = undefined;
         this.audio = undefined;
-        this.playbtn = <Button className="transparent black-text z-depth-0" onClick={function () {self.play();}}><i id={"playbtn"} className="material-icons" >{this.state.paused ? 'play_arrow' : 'pause'}</i></Button>;
-        this.shufflebtn = <Button id="shufflebtn" className="transparent black-text z-depth-0"><Icon>shuffle</Icon></Button>;
-        this.nextbtn = <Button id="nextbtn" onClick={function(){self.next();}} className="transparent black-text z-depth-0"><Icon>skip_next</Icon></Button>;
-        this.previousbtn = <Button id="previousbtn" onClick={function(){self.previous();}} className="transparent black-text z-depth-0"><Icon>skip_previous</Icon></Button>;
         this.indicator = <Indicator player={self}/>;
-        this.repeatbtn = <Button id="repeatbtn" className="transparent black-text z-depth-0"><Icon>repeat</Icon></Button>;
-        this.volumebtn = <Button id="volbtn" className="transparent black-text z-depth-0"><Icon>volume_up</Icon></Button>;
-        this.volume_slider = <Icon><input id="vol-control" type="range"/></Icon>;
-        this.queuebtn = <Button id="queuebtn" className="transparent black-text z-depth-0"><Icon>queue_music</Icon></Button>;
         this.duration_indicator = <DurationIndicator player={self}/>;
     }
     componentDidMount() {
     }
     componentWillUnmount() {
     }
+    shuffleQueue() {
+        let shuffle = !this.state.shuffle;
+        this.setState({
+            shuffle: shuffle
+        });
+        console.log(this.state.shuffle);
+        if(this.state.shuffle) {
+            this.queue.shuffle();
+            if (this.current_track != undefined) {
+                this.queue.swap(0, this.queue.findWithAttr("id", this.current_track.id));
+            }
+        }
+    }
     previous() {
         if (this.queue.length > 0) {
-            if (this.repeat < 2) {
+            if (this.state.repeat < 2) {
                 this.track_number--;
             } else {
                 this.audio.seek(0);
             }
             if (this.track_number < 0) {
-                if (this.repeat == 1) {
+                if (this.state.repeat == 1) {
                     this.track_number = this.queue.length - 1;
                     this.changeSrc(this.queue[this.track_number]);
                 } else {
@@ -133,10 +138,12 @@ class Player extends Component {
     play() {
         let self = this;
         if (this.audio !== undefined) {
-            if (this.paused) {
+            if (this.state.paused) {
                 this.audio.play();
                 this.paused = false;
-                document.getElementById('playbtn').innerText = 'pause';
+                this.setState({
+                    paused: false
+                });
                 if(this.current_track != undefined){
                     this.current_track.play();
                 }
@@ -144,7 +151,9 @@ class Player extends Component {
             else {
                 this.audio.pause();
                 this.paused = true;
-                document.getElementById('playbtn').innerText = 'play_arrow';
+                this.setState({
+                    paused: true
+                });
                 if(this.current_track != undefined){
                     this.current_track.pause();
                 }
@@ -191,6 +200,10 @@ class Player extends Component {
             this.queue.push(track);
         }
     }
+    setQueue(playlist) {
+        this.emptyQueue();
+        this.queue = playlist;
+    }
     stop() {
         let self = this;
         this.audio.seek(0);
@@ -225,14 +238,14 @@ class Player extends Component {
                         <Row>
                             <Col s={11}>
                                 <Row>
-                                    {self.queuebtn}
-                                    {self.previousbtn}
-                                    {self.playbtn}
-                                    {self.nextbtn}
-                                    {self.shufflebtn}
-                                    {self.repeatbtn}
-                                    {self.volumebtn}
-                                    {self.volume_slider}
+                                    <Button id="queuebtn" className="transparent black-text z-depth-0"><Icon>queue_music</Icon></Button>
+                                    <Button id="previousbtn" onClick={function(){self.previous();}} className="transparent black-text z-depth-0"><Icon>skip_previous</Icon></Button>
+                                    <Button className="transparent black-text z-depth-0" onClick={function () {self.play();}}><i id={"playbtn"} className="material-icons" >{this.state.paused ? 'play_arrow' : 'pause'}</i></Button>
+                                    <Button id="nextbtn" onClick={function(){self.next();}} className="transparent black-text z-depth-0"><Icon>skip_next</Icon></Button>
+                                    <Button id="shufflebtn" onClick={function () {self.shuffleQueue()}} className={this.state.shuffle ? "transparent black-text z-depth-0 cyan-text" : "transparent black-text z-depth-0"}><Icon>shuffle</Icon></Button>
+                                    <Button id="repeatbtn" className="transparent black-text z-depth-0"><Icon>repeat</Icon></Button>
+                                    <Button id="volbtn" className="transparent black-text z-depth-0"><Icon>volume_up</Icon></Button>
+                                    <Icon><input id="vol-control" type="range"/></Icon>
                                 </Row>
                             </Col>
                             <Col s={1}>

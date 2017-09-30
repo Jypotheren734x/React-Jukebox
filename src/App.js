@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Col, Collection, Icon, Navbar, NavItem, Row} from "react-materialize";
+import {Col, Icon, Navbar, NavItem, Row} from "react-materialize";
 import Player from "./Player";
-import Track from './Track';
 import Playlist from './Playlist';
 import * as ReactDOM from "react-dom";
+
 var SC = require('soundcloud');
 
 class Jukebox extends Component {
@@ -14,7 +14,6 @@ class Jukebox extends Component {
         SC.initialize({
             client_id: 'DoPASlLzDUFjxJHRDESP267TmnAjyrza'
         });
-        this.player = new Player(this);
         this.search_bar = <input onKeyUp={(e)=>this.search(e)} type="text" placeholder="Search by artist, title, genre, etc." className="black-text"/>;
         this.searching = false;
     }
@@ -23,18 +22,9 @@ class Jukebox extends Component {
         if(e.which === 13) {
             let self = this;
             self.searching = true;
-            self.player.emptyQueue();
             let value = e.target.value;
-
             SC.get(`/tracks`, {q: value, limit: 200}).then(function (tracks) {
-                let search_results = [];
-                tracks.forEach(function (track) {
-                    let current = <Track track={track} player={self.player} />;
-                    self.player.addToQueue(current);
-                    search_results.push(current);
-                });
-                console.log(search_results);
-                ReactDOM.render(<Playlist tracks={search_results} title={'Search for ' + value}/>, document.getElementById('tracks'));
+                ReactDOM.render(<Playlist tracks={tracks} title={'Search for ' + value} player={self.player}/>, document.getElementById('tracks'));
             });
         }
     }
@@ -70,7 +60,7 @@ class Jukebox extends Component {
                     </div>
                 </main>
                 <footer>
-                    {this.player.render()}
+                    <Player jukebox={this} ref={instance => { this.player = instance; }}/>;
                 </footer>
             </div>
         );
