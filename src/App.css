@@ -32,6 +32,40 @@ main {
   padding: 0 !important;
 }
 
+input[type=range] + .thumb {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  border: none;
+  height: 0;
+  width: 0;
+  border-radius: 50%;
+  background-color: #26a69a;
+  margin-left: 7px;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  display: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background-color: #00acc1 !important;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  margin: -5px 0 0 0;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+input[type=range]::-moz-range-track {
+  background-color: #00bcd4 !important;
+}
+
 input[type=range]::-moz-range-track {
   background-color: #00bcd4 !important;
 }

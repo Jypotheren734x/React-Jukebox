@@ -40,10 +40,11 @@ class Jukebox extends Component {
             SC.get(`/tracks`, {q: value, limit: 100}).then(function (tracks) {
                 let search_results = [];
                 tracks.forEach(function (track) {
-                    let current = new Track(track, self.player);
+                    let current = <Track track={track} player={self.player} />;
                     self.player.addToQueue(current);
-                    search_results.push(current.render());
+                    search_results.push(current);
                 });
+                console.log(search_results);
                 ReactDOM.render(<TracksContainer tracks={search_results}/>, document.getElementById('tracks'));
             });
         }
