@@ -37,7 +37,8 @@ class Jukebox extends Component {
             self.searching = true;
             self.player.emptyQueue();
             let value = e.target.value;
-            SC.get(`/tracks`, {q: value, limit: 100}).then(function (tracks) {
+
+            SC.get(`/tracks`, {q: value, limit: 200}).then(function (tracks) {
                 let search_results = [];
                 tracks.forEach(function (track) {
                     let current = <Track track={track} player={self.player} />;
